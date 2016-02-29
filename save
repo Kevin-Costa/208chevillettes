@@ -1,0 +1,150 @@
+//
+// chevillettes.cpp for 208 in /home/alexandre/Projects/B4/maths/208chevillettes
+// 
+// Made by Alexandre Vanhoutte
+// Login   <alexandre@epitech.net>
+// 
+// Started on  Tue May 26 11:14:10 2015 Alexandre Vanhoutte
+// Last update Thu May 28 15:52:22 2015 Alexandre Vanhoutte
+//
+
+#include	<iostream>
+#include	<stdlib.h>
+#include	<math.h>
+#include	<list>
+#include	"Chevillettes.hh"
+
+Chevillettes::Chevillettes() {}
+
+Chevillettes::~Chevillettes() {}
+
+bool		Chevillettes::checkArguments(int ac, char **av)
+{
+  int		i;
+  int		j;
+
+  if (ac != 10)
+    {
+      std::cerr << "Le programme a besoin de 9 arguments" << std::endl;
+      return (false);
+    }
+  i = 1;
+  while (av[i])
+    {
+      j = 0;
+      while (av[i][j])
+	{
+	  if (av[i][j] < '0' || av[i][j] > '9')
+	    {
+	      std::cout << i << " " << j << std::endl;
+	      std::cerr << "Les arguments doivent être uniquement composés de chiffres" << std::endl;
+	      return (false);
+	    }
+	  j++;
+	}
+      i++;
+    }
+  int		result = 0;
+  i = 1;
+  while (av[i])
+    {
+      result += atoi(av[i]);
+      i++;
+    }
+  if (result != 100)
+    {
+      std::cerr << "L'ensemble des arguments doit être égale à 100." << std::endl;
+      return (false);
+    }
+  return (true);
+}
+
+bool		Chevillettes::displayTab(char **ox)
+{
+  std::list<int>	newOX;
+  std::list<double>	newTX;
+  int			i;
+  int			tmp;
+  double		p;
+
+  i = 1;
+  tmp = 0;
+  std::cout << " x\t| ";
+  while (i < 10)
+    {
+      if (tmp == 0)
+	std::cout << i - 1;
+      tmp += atoi(ox[i]);
+      if (tmp >= 10)
+	{
+	  if (tmp != atoi(ox[i]))
+	    std::cout << "-" << i - 1;
+	  std::cout << "\t|";
+	  newOX.push_back(tmp);
+	  tmp = 0;
+	}
+      i++;
+    }
+  std::cout << " total" << std::endl;
+  std::cout << "------------------------------------------------------------------------" << std::endl;
+  std::list<int>::iterator	it = newOX.begin();
+  std::cout << " Ox\t| ";
+  while (it != newOX.end())
+    {
+      std::cout << *it << "\t| ";
+      it++;
+    }
+  std::cout << " 100" << std::endl;
+  std::cout << "------------------------------------------------------------" << std::endl;
+  p = (atoi(ox[1]) * 0 + atoi(ox[2]) * 1 + atoi(ox[3]) * 2 + atoi(ox[4]) * 3 + atoi(ox[5]) * 4 + atoi(ox[6]) * 5 + atoi(ox[7]) * 6 + atoi(ox[8]) * 7 + atoi(ox[9]) * 8) / 10000.0;
+  i = 1;
+  double result;
+
+
+  while (i < 10)
+    {
+      result = 100 * combinaison(i - 1, 100) * pow(p, i - 1) * pow((1 - p), 100 - i - 1);
+      // double res2;
+      // res2 = 100 * combinaison(1, 100) * pow(p, 1) * pow((1 - p), 100 - 1);
+      // result = result + res2;
+      newTX.push_back(result);
+      std::cout << "res = " << result << std::endl;
+
+      i++;
+    }
+
+}
+
+double		factorielle(double lim)
+{
+  double		result = 1;
+  double		i = 2;
+
+  while (i <= lim)
+    {
+      result *= i;
+      i++;
+    }
+  return (result);
+}
+
+double		combinaison(int n, int k)
+{
+  double num;
+  double denum1;
+  double denum2;
+
+  num = factorielle(k);
+  denum1 = factorielle(n);
+  denum2 = factorielle(k - n);
+  denum1 *= denum2;
+  return (num / denum1);
+}
+
+bool		Chevillettes::run(int ac, char **ox)
+{
+  if ((checkArguments(ac, ox)) == false)
+    return (false);
+  displayTab(ox);
+  
+}
